@@ -28,7 +28,7 @@ const connectDB = async () => {
 dotenv.config();
 app.use(express.json()); // For parsing JSON data
 app.use("/images", express.static(path.join(__dirname, "/images"))); // Serve image files
-app.use(cors({ origin: "http://localhost:5173", credentials: true })); // CORS setup for frontend
+app.use(cors({ origin: "https://mern-vlog-eight.vercel.app", credentials: true })); // CORS setup for frontend
 app.use(cookieParser()); // Cookie parsing middleware
 
 // API Routes
