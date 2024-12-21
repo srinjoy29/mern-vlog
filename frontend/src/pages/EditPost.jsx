@@ -33,6 +33,12 @@ const EditPost = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+
+    if (!user) {
+      console.log("User not authenticated");
+      return;
+    }
+
     const post = {
       title,
       desc, // Rich text description
@@ -41,6 +47,8 @@ const EditPost = () => {
       categories: cats,
     };
 
+    const token = localStorage.getItem("authToken"); // Assuming token is stored in localStorage
+
     if (file) {
       const data = new FormData();
       const filename = Date.now() + file.name;
@@ -48,19 +56,29 @@ const EditPost = () => {
       data.append("file", file);
       post.photo = filename;
       try {
-        const imgUpload = await axios.post(URL + "/api/upload", data);
+        await axios.post(URL + "/api/upload", data, {
+          headers: {
+            Authorization: `Bearer ${token}`,  // Include the token here for image upload
+          },
+        });
       } catch (err) {
-        console.log(err);
+        console.log("Error uploading file:", err);
       }
     }
 
     try {
       const res = await axios.put(URL + "/api/posts/" + postId, post, {
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,  // Include the token here for post update
+        },
       });
       navigate("/posts/post/" + res.data._id);
     } catch (err) {
-      console.log(err);
+      console.log("Error updating post:", err);
+      if (err.response && err.response.status === 401) {
+        alert("You are not authenticated. Please log in again.");
+        navigate("/login");  // Redirect to login page
+      }
     }
   };
 

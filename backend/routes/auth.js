@@ -18,6 +18,12 @@ router.post('/register', async (req, res) => {
             return res.status(400).json("All fields are required!");
         }
 
+        // Check if email already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json("User already exists!");
+        }
+
         // Hash the password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
@@ -26,11 +32,23 @@ router.post('/register', async (req, res) => {
         const newUser = new User({ username, email, password: hashedPassword });
         const savedUser = await newUser.save();
 
-        res.status(200).json(savedUser);
+        // Generate JWT token
+        const token = jwt.sign(
+            { _id: savedUser._id, username: savedUser.username, email: savedUser.email },
+            process.env.SECRET,
+            { expiresIn: '3d' }
+        );
+
+        const { password: _, ...userInfo } = savedUser._doc; // Exclude password from response
+
+        // Send token as part of the response (for front-end to store in localStorage)
+        res.status(200).json({ token, user: userInfo });
+
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
+
 
 // LOGIN
 router.post('/login', async (req, res) => {
@@ -64,15 +82,8 @@ router.post('/login', async (req, res) => {
 
         const { password: _, ...info } = user._doc; // Exclude password from response
 
-        // Send token as a cookie
-        res
-            .cookie('token', token, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
-            })
-            .status(200)
-            .json(info);
+        // Send token as part of the response (for front-end to store in localStorage)
+        res.status(200).json({ token, user: info });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -81,14 +92,7 @@ router.post('/login', async (req, res) => {
 // LOGOUT
 router.get('/logout', (req, res) => {
     try {
-        res
-            .clearCookie('token', {
-                sameSite: 'strict',
-                secure: process.env.NODE_ENV === 'production',
-                httpOnly: true,
-            })
-            .status(200)
-            .send('User logged out successfully!');
+        res.status(200).json('User logged out successfully!');
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
