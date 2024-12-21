@@ -1,0 +1,46 @@
+/* CreatePost.css */
+.ql-snow .ql-picker.ql-background {
+    color: #1a73e8; /* Customize highlight color */
+}
+
+/* Apply background color to entire block (paragraph/div) */
+.ql-snow .ql-editor p.ql-background-selected {
+    background-color: yellow !important; /* Apply block-level background color */
+}
+
+.ql-snow .ql-editor .ql-background-selected {
+    background-color: yellow !important; /* Highlight selected block */
+}
+
+.ql-snow .ql-picker-item[data-value="yellow"] {
+    background-color: #ffff00; /* Yellow highlight color */
+}
+
+/* CreatePost.css */
+.ql-snow .ql-editor pre {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.ql-snow .ql-editor .ql-code-block {
+    background-color: #f5f5f5; /* Background color for code block */
+    color: #0f1271; /* Text color for code block */
+    padding: 10px;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+.post-desc pre code {
+    background-color: #0b3769;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+    white-space: pre-wrap;
+  }
+  
+
