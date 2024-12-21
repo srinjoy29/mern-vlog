@@ -10,14 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@codemirror/lang-javascript": "^6.2.2",
-    "@uiw/react-codemirror": "^4.23.7",
     "axios": "^1.4.0",
     "codemirror": "^6.0.1",
     "prismjs": "^1.29.0",
     "quill": "^2.0.3",
     "react": "^18.2.0",
-    "react-codemirror2": "^8.0.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.10.1",
     "react-quill": "^2.0.0",
